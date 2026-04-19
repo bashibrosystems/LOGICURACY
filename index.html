@@ -3,287 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TYPEX | Industrial SKU Reconciliation for 3PL Operations</title>
+    <title>TYPEX | Industrial SKU Reconciliation & Order Accuracy for 3PLs</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; line-height: 1.6; }
+        :root {
+            --emerald: #10b981;
+            --amber: #f59e0b;
+            --slate-950: #020617;
+            --slate-900: #0f172a;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--slate-950); 
+            color: #f8fafc;
+            line-height: 1.6;
+        }
         .mono { font-family: 'JetBrains Mono', monospace; }
         
-        .hero-overlay {
-            background: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.98)), 
-                        url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover; background-position: center;
+        /* Hero Styling */
+        .hero-bg {
+            background: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), 
+                        url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
         }
 
-        .industrial-card {
-            background: #0f172a;
-            border: 1px solid #1e293b;
-            position: relative;
-        }
+        /* Typography & Utility */
+        .text-huge { font-size: clamp(3rem, 10vw, 8rem); line-height: 0.85; letter-spacing: -0.04em; }
+        .section-padding { padding: 120px 0; }
+        .industrial-border { border: 1px solid rgba(255, 255, 255, 0.1); }
+        .emerald-glow { box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
+        .amber-glow { box-shadow: 0 0 40px rgba(245, 158, 11, 0.1); }
 
-        .emerald-tag {
-            color: #10b981;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
+        /* Custom UI Elements */
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .bg-emerald { background-color: var(--emerald); }
+        .bg-amber { background-color: var(--amber); }
 
-        .hospital-border { border-left: 4px solid #f59e0b; }
-        .clean-border { border-left: 4px solid #10b981; }
-
-        input, select, textarea {
-            background: #020617 !important;
-            border: 1px solid #334155 !important;
-            color: #ffffff !important;
-            border-radius: 0px !important;
-            padding: 1rem !important;
-        }
-        input:focus { border-color: #10b981 !important; outline: none; }
-
-        .btn-industrial {
-            background: #10b981;
-            color: #020617;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-            display: inline-block;
-            padding: 1.25rem 2.5rem;
-        }
-        .btn-industrial:hover { background: #ffffff; transform: translateY(-2px); }
-
-        .placeholder-img {
+        .image-placeholder {
             background: #1e293b;
             border: 1px dashed #334155;
+            aspect-ratio: 16/9;
             display: flex;
             align-items: center;
             justify-content: center;
-            aspect-ratio: 16/9;
-            color: #475569;
-            font-weight: 800;
+            color: #64748b;
+            font-weight: 700;
             text-transform: uppercase;
+            overflow: hidden;
         }
+        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+        input, select, textarea {
+            background: var(--slate-900) !important;
+            border: 1px solid #1e293b !important;
+            color: white !important;
+            border-radius: 4px !important;
+            padding: 1.25rem !important;
+            width: 100%;
+        }
+        input:focus { border-color: var(--emerald) !important; outline: none; }
+
+        .btn-primary {
+            background: var(--emerald);
+            color: var(--slate-950);
+            padding: 1.25rem 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+        .btn-primary:hover { background: #fff; transform: translateY(-2px); }
+
+        /* Horizontal Scroll Indicator */
+        .line-growth { height: 2px; background: var(--emerald); width: 0; transition: width 0.5s; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- NAVIGATION -->
-    <nav class="fixed w-full z-50 bg-slate-950/90 backdrop-blur-sm border-b border-slate-900">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-emerald-500 flex items-center justify-center font-black text-slate-950">T</div>
-                <span class="text-xl font-black uppercase tracking-tighter">TYPEX <span class="text-emerald-500 font-light italic text-sm">Industrial</span></span>
+    <nav class="fixed w-full z-50 bg-slate-950/90 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-emerald-500 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg">T</div>
+                <div>
+                    <span class="text-2xl font-black uppercase tracking-tighter">TYPEX</span>
+                    <span class="block text-[10px] tracking-[0.4em] text-emerald-500 font-bold uppercase">by Logicuracy</span>
+                </div>
             </div>
-            <a href="#trial" class="text-[10px] font-black uppercase tracking-widest bg-white text-black px-4 py-2 hover:bg-emerald-500 transition">Request Early Access</a>
+            <div class="hidden lg:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                <a href="#problem" class="hover:text-emerald-500 transition">The Problem</a>
+                <a href="#logic" class="hover:text-emerald-500 transition">Accuracy Logic</a>
+                <a href="#security" class="hover:text-emerald-500 transition">Privacy</a>
+                <a href="#founder" class="hover:text-emerald-500 transition">About</a>
+            </div>
+            <a href="#trial" class="bg-white text-black px-6 py-3 font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition duration-300">Request Trial Access</a>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <header class="hero-overlay min-h-screen flex items-center pt-20">
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+    <!-- HERO SECTION -->
+    <header class="hero-bg min-h-screen flex items-center pt-24">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
             <div>
-                <span class="emerald-tag">Built for 3PL Operations</span>
-                <h1 class="text-5xl md:text-7xl font-black leading-[0.9] uppercase tracking-tighter mt-4 mb-8">
-                    Your WMS won't accept <span class="text-emerald-500">Messy SKUs.</span> <br>We fix that.
+                <div class="inline-flex items-center gap-3 px-3 py-1 border border-emerald-500/20 bg-emerald-500/5 mb-8">
+                    <span class="status-dot bg-emerald animate-pulse"></span>
+                    <span class="mono text-[10px] text-emerald-500 font-bold uppercase tracking-widest">Offline Reconciliation Engine Active</span>
+                </div>
+                <h1 class="text-huge font-black uppercase mb-8">
+                    SHIP FAST.<br><span class="text-emerald-500 italic">ZERO ERRORS.</span>
                 </h1>
-                <p class="text-lg text-slate-400 max-w-lg mb-10">
-                    Stop paying staff to play "detective" in Excel. TYPEX is an <strong>offline engine</strong> that heals daily order typos against your Master SKU list before they hit your WMS. 
+                <p class="text-xl text-slate-400 leading-relaxed mb-10 max-w-xl">
+                    Stop fixing client typos by hand. TYPEX automatically reconciles messy order sheets against your Master SKU list, so your team can stop troubleshooting and start picking.
                 </p>
-                <div class="flex gap-4">
-                    <a href="#trial" class="btn-industrial text-sm">Deploy Offline Trial</a>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="#trial" class="btn-primary text-sm shadow-2xl shadow-emerald-500/20">Initialize Deployment Access</a>
+                    <div class="flex items-center gap-4 px-6 border-l border-white/10">
+                        <span class="text-3xl font-black">85%</span>
+                        <span class="text-[9px] leading-tight uppercase font-bold text-slate-500 tracking-widest">Confidence<br>Threshold</span>
+                    </div>
                 </div>
             </div>
-            <div class="hidden lg:block">
-                <div class="industrial-card p-2 shadow-2xl">
-                    <div class="placeholder-img bg-slate-900">
-                        <img src="app-main-preview.png" alt="TYPEX Interface Preview" onerror="this.style.display='none'; this.parentNode.innerHTML='[ Dashboard Preview ]'">
+            <div class="relative lg:block hidden">
+                <div class="industrial-border p-3 bg-slate-900/50 backdrop-blur-sm emerald-glow">
+                    <div class="image-placeholder">
+                        <img src="app-main-preview.png" alt="TYPEX Dashboard Preview" onerror="this.style.display='none'; this.parentNode.innerHTML='[ INDUSTRIAL INTERFACE PREVIEW ]'">
                     </div>
+                </div>
+                <div class="absolute -bottom-10 -right-10 bg-emerald-500 p-8 industrial-border text-slate-950 hidden xl:block">
+                    <p class="text-4xl font-black leading-none">90%</p>
+                    <p class="text-[10px] font-bold uppercase tracking-tighter">Auto-Healing Rate</p>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- THE PROBLEM (MANAGER'S PERSPECTIVE) -->
-    <section class="py-24 bg-slate-950 border-b border-slate-900">
+    <!-- THE "WHY" - FOUNDER'S PERSPECTIVE -->
+    <section id="problem" class="section-padding bg-slate-950 border-y border-white/5">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="max-w-3xl">
-                <h2 class="text-3xl font-black uppercase mb-8">The 8:00 AM Labor Leak</h2>
-                <p class="text-xl text-slate-400 mb-12 leading-relaxed">
-                    You get an export from a client’s Shopify or Amazon store. It’s full of "human errors"—extra spaces, missing dashes, or SKU names that haven't been used in three years. 
-                    <br><br>
-                    <strong>Your WMS rejects the file.</strong> Your pickers stand idle while a manager spends two hours in Excel doing manual data entry. That is burned profit and lost throughput.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-px bg-slate-800 border border-slate-800 mt-12">
-                <div class="bg-slate-950 p-10">
-                    <h3 class="text-emerald-500 font-black uppercase text-xs mb-4">Why it happens</h3>
-                    <p class="text-sm text-slate-400">Clients don't maintain their product catalogs. They change names on the storefront but not in your warehouse. The resulting "SKU Mismatch" is the #1 cause of morning order delays.</p>
+            <div class="grid lg:grid-cols-2 gap-24 items-start">
+                <div>
+                    <h2 class="text-xs font-black text-emerald-500 uppercase tracking-[0.4em] mb-6">The Operations Gap</h2>
+                    <h3 class="text-4xl font-black uppercase tracking-tighter mb-8 leading-tight">
+                        I built this because I watched <br><span class="italic text-slate-500">labor margins bleed out in Excel.</span>
+                    </h3>
+                    <p class="text-slate-400 text-lg mb-8">
+                        I've spent years working with 3PLs and warehouses. Every morning is the same: the client sends a "Daily Order List" exported from a storefront like Shopify or Amazon. 
+                        <br><br>
+                        But the SKUs don't match. A brand manager added an extra space. A merchant changed a name but didn't tell the warehouse. 
+                        <strong>Your WMS rejects the file.</strong> 
+                        <br><br>
+                        Now, you have pickers standing idle at $25/hour while an Operations Manager sits in a dark office manually "Finding and Replacing" typos in a CSV. That is a failure of infrastructure.
+                    </p>
                 </div>
-                <div class="bg-slate-950 p-10">
-                    <h3 class="text-emerald-500 font-black uppercase text-xs mb-4">How we fix it</h3>
-                    <p class="text-sm text-slate-400">TYPEX uses logic-heavy algorithms to find the "hidden patterns" in messy text. We don't just guess; we use industrial-grade math to match messy strings to your Master List with surgical precision.</p>
+                <div class="space-y-12">
+                    <div class="p-10 bg-slate-900/50 industrial-border relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 mono text-[10px] text-slate-700">01 / REJECTION</div>
+                        <h4 class="text-xl font-black uppercase mb-4">The WMS Wall</h4>
+                        <p class="text-sm text-slate-400">Warehouse Management Systems are built for precision, not flexibility. One typo in a 5,000-line file means the whole batch fails. TYPEX acts as the filter that ensures only perfect data hits your WMS.</p>
+                    </div>
+                    <div class="p-10 bg-slate-900/50 industrial-border relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 mono text-[10px] text-slate-700">02 / MANUAL LABOR</div>
+                        <h4 class="text-xl font-black uppercase mb-4">The "Excel Detective"</h4>
+                        <p class="text-sm text-slate-400">Manual SKU correction is the most expensive way to use a manager's time. TYPEX automates the reconciliation, freeing your leadership to focus on floor throughput, not data entry.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ACCURACY / HOSPITAL FILE BLENDING -->
-    <section class="py-24 bg-slate-900/20">
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
-            <div>
-                <h2 class="text-4xl font-black uppercase tracking-tighter mb-8 leading-tight">We Heal 90%. <br>We Quarantine 10%.</h2>
-                <p class="text-slate-400 mb-6 italic">In a warehouse, a wrong guess is worse than a rejection.</p>
-                <p class="text-slate-400 mb-10 leading-relaxed">
-                    If a SKU match hits an <strong> 85% confidence score </strong>, TYPEX heals it instantly. You get a clean, WMS-ready file for 90% of your orders. 
-                    <br><br>
-                    But if the data is too messy—if it's mathematically impossible to be sure—we don't guess. We move that data into a "Hospital File." Your team only manually touches the 10% that actually needs a human eye.
-                </p>
-                <div class="space-y-4">
-                    <div class="industrial-card p-6 clean-border">
-                        <span class="mono text-[10px] text-emerald-500 uppercase">Output A: Clean Export</span>
-                        <p class="text-sm font-bold mt-2 italic">Ready for WMS Import. 100% Corrected.</p>
+    <!-- ACCURACY LOGIC & THE HOSPITAL FILE -->
+    <section id="logic" class="section-padding bg-slate-900/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black uppercase tracking-tighter mb-4 italic">The 85% Confidence Protocol</h2>
+                <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.4em]">Integrated Decision Logic</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-px bg-white/5 industrial-border shadow-2xl">
+                <div class="bg-slate-950 p-12 lg:p-20 group">
+                    <div class="flex items-center gap-4 mb-10">
+                        <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/50 flex items-center justify-center text-emerald-500 font-black">90%</div>
+                        <h3 class="text-3xl font-black uppercase tracking-tighter">Clean Export</h3>
                     </div>
-                    <div class="industrial-card p-6 hospital-border">
-                        <span class="mono text-[10px] text-amber-500 uppercase">Output B: Hospital Folder</span>
-                        <p class="text-sm font-bold mt-2 italic">Quarantined for Manager Review. No guessing.</p>
+                    <p class="text-slate-400 mb-8 leading-relaxed">
+                        If our algorithms identify an <strong>85% match</strong> or higher, TYPEX heals the SKU instantly. Based on historical logistics data, this covers approximately 90% of all common "messy data" errors. These orders are moved to a clean file, ready for immediate WMS upload.
+                    </p>
+                    <div class="mono text-[10px] py-3 border-y border-white/5 text-emerald-500 uppercase tracking-widest font-bold">
+                        Result: 100% Corrected & Verified
                     </div>
                 </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 p-12">
-                <h3 class="text-xl font-black uppercase mb-6">Zero Cloud Risk</h3>
-                <p class="text-sm text-slate-500 mb-8 leading-relaxed">
-                    Most software wants your data in their cloud. As a manager, that’s a PII liability. TYPEX is an **offline executable**. It runs in an **air-gapped environment**. 
-                </p>
-                <ul class="space-y-4">
-                    <li class="flex items-start gap-4 text-xs font-bold uppercase tracking-widest text-slate-300">
-                        <div class="w-5 h-5 bg-emerald-500 flex-shrink-0"></div> No Internet Required
-                    </li>
-                    <li class="flex items-start gap-4 text-xs font-bold uppercase tracking-widest text-slate-300">
-                        <div class="w-5 h-5 bg-emerald-500 flex-shrink-0"></div> 100% GDPR Compliant (Data never leaves)
-                    </li>
-                    <li class="flex items-start gap-4 text-xs font-bold uppercase tracking-widest text-slate-300">
-                        <div class="w-5 h-5 bg-emerald-500 flex-shrink-0"></div> No Subscription Fluff
-                    </li>
-                </ul>
+
+                <div class="bg-slate-950 p-12 lg:p-20 group">
+                    <div class="flex items-center gap-4 mb-10">
+                        <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/50 flex items-center justify-center text-amber-500 font-black">10%</div>
+                        <h3 class="text-3xl font-black uppercase tracking-tighter">Hospital File</h3>
+                    </div>
+                    <p class="text-slate-400 mb-8 leading-relaxed">
+                        Logistics is messy, and a wrong guess is a mis-picked order. If a match falls below the 85% threshold, TYPEX will not attempt a fix. It quarantines these lines into a <strong>"Hospital File."</strong> Your manager only reviews the 10% that actually requires human judgment.
+                    </p>
+                    <div class="mono text-[10px] py-3 border-y border-white/5 text-amber-500 uppercase tracking-widest font-bold">
+                        Result: Quarantined for Integrity
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 3-STEP PROCESS -->
-    <section class="py-24 bg-slate-950 border-y border-slate-900">
+    <!-- THE DEPLOYMENT (3 STEPS) -->
+    <section class="section-padding bg-slate-950">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-black uppercase italic">Deployment Workflow</h2>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                <div class="max-w-xl">
+                    <h2 class="text-4xl font-black uppercase tracking-tighter mb-4 italic">Deployment Workflow</h2>
+                    <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.3em]">From Rejection to Picking in 180 Seconds</p>
+                </div>
+                <div class="mono text-[10px] text-slate-700 font-bold uppercase border-b border-white/10 pb-2">
+                    System Version: Industrial 1.0.4
+                </div>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
+
+            <div class="grid md:grid-cols-3 gap-12">
                 <!-- STEP 1 -->
-                <div class="space-y-6">
-                    <div class="placeholder-img">
-                        <img src="app-get.png" alt="Download Step" onerror="this.style.display='none'; this.parentNode.innerHTML='[ Image: app-get.png ]'">
+                <div class="group">
+                    <div class="image-placeholder mb-8 industrial-border emerald-glow">
+                        <img src="app-get.png" alt="Get App" onerror="this.style.display='none'; this.parentNode.innerHTML='[ IMAGE: app-get.png ]'">
                     </div>
-                    <h4 class="font-black text-lg uppercase tracking-tight">1. Receive Application</h4>
-                    <p class="text-sm text-slate-500">Once your facility is verified, we send the TYPEX executable. No installation needed. Just run it on your warehouse machine.</p>
+                    <h4 class="text-xl font-black uppercase mb-4 flex items-center gap-3">
+                        <span class="text-emerald-500 italic">01.</span> Request & Load
+                    </h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Request your machine-locked access key. TYPEX is an offline executable. No installation, no cloud logins. Just run the tool on your warehouse terminal.
+                    </p>
                 </div>
 
                 <!-- STEP 2 -->
-                <div class="space-y-6">
-                    <div class="placeholder-img">
-                        <img src="app-run.png" alt="Run Step" onerror="this.style.display='none'; this.parentNode.innerHTML='[ Image: app-run.png ]'">
+                <div class="group">
+                    <div class="image-placeholder mb-8 industrial-border">
+                        <img src="app-run.png" alt="Run Audit" onerror="this.style.display='none'; this.parentNode.innerHTML='[ IMAGE: app-run.png ]'">
                     </div>
-                    <h4 class="font-black text-lg uppercase tracking-tight">2. Load & Reconcile</h4>
-                    <p class="text-sm text-slate-500">Drag in your Master SKU export and your Daily Order sheet. Hit 'Reconcile'. The offline engine audits every line in seconds.</p>
+                    <h4 class="text-xl font-black uppercase mb-4 flex items-center gap-3">
+                        <span class="text-emerald-500 italic">02.</span> Run The Audit
+                    </h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Drag in your Master SKU export and your Daily Order list. Hit 'Reconcile'. Our engine processes 10,000 lines in under 10 seconds using localized CPU power.
+                    </p>
                 </div>
 
                 <!-- STEP 3 -->
-                <div class="space-y-6">
-                    <div class="placeholder-img">
-                        <img src="app-result.png" alt="Result Step" onerror="this.style.display='none'; this.parentNode.innerHTML='[ Image: app-result.png ]'">
+                <div class="group">
+                    <div class="image-placeholder mb-8 industrial-border">
+                        <img src="app-result.png" alt="Result Report" onerror="this.style.display='none'; this.parentNode.innerHTML='[ IMAGE: app-result.png ]'">
                     </div>
-                    <h4 class="font-black text-lg uppercase tracking-tight">3. Export & Import</h4>
-                    <p class="text-sm text-slate-500">Download the clean file for your WMS. Anything unsure stays in the 'Hospital' for you to review. You're ready to pick in minutes.</p>
+                    <h4 class="text-xl font-black uppercase mb-4 flex items-center gap-3">
+                        <span class="text-emerald-500 italic">03.</span> Export Accuracy
+                    </h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Download your "Healed" CSV for instant WMS import. Any outliers are flagged in the accuracy report and moved to your "Hospital Folder" for review.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- TRIAL ACCESS FORM -->
-    <section id="trial" class="py-32 bg-slate-900/50">
+    <!-- SECURITY & PRIVACY POLICY SECTION -->
+    <section id="security" class="section-padding bg-slate-900/40 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
+            <div>
+                <h2 class="text-4xl font-black uppercase tracking-tighter mb-8 leading-tight text-emerald-500">
+                    Your Data Stays Local.<br>Period.
+                </h2>
+                <p class="text-lg text-slate-400 mb-10 leading-relaxed">
+                    Most "AI" companies want you to upload your client lists, customer names, and order volumes to their cloud. For a 3PL manager, that is a massive <strong>PII (Personally Identifiable Information) liability.</strong>
+                    <br><br>
+                    TYPEX is built on a "Privacy by Design" architecture. It is an <strong>offline engine</strong>. We don't want your data, and we've engineered the tool so we *can't* see it even if we wanted to.
+                </p>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h5 class="text-white font-bold uppercase text-xs mb-3">Air-Gapped Ready</h5>
+                        <p class="text-xs text-slate-500">The engine requires zero internet connection to reconcile files. Zero data transmission risk.</p>
+                    </div>
+                    <div>
+                        <h5 class="text-white font-bold uppercase text-xs mb-3">PII Protection</h5>
+                        <p class="text-xs text-slate-500">Customer names and addresses are never indexed or stored. We only look at SKUs and Quantities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-12 bg-slate-950 industrial-border mono text-[11px] leading-loose text-slate-500">
+                <p class="text-emerald-500 mb-4 font-bold uppercase tracking-widest">// PRIVACY PROTOCOL V1.0</p>
+                <p>> LOCAL_STORAGE_ONLY: TRUE</p>
+                <p>> ENCRYPTION_LAYER: AES-256 (LOCAL)</p>
+                <p>> DATA_RETENTION_POLICY: ZERO_KNOWLEDGE</p>
+                <p>> GDPR_STATUS: COMPLIANT BY ARCHITECTURE</p>
+                <p>> PII_SHIELD: ACTIVE</p>
+                <p class="mt-8 text-slate-400 font-bold uppercase tracking-widest">Logicuracy Security Mandate:</p>
+                <p class="italic">"We provide the math. You keep the data. Our software is a standalone tool designed to live on your machine, not in our database."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOUNDER SECTION -->
+    <section id="founder" class="section-padding bg-slate-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-16 items-center">
+            <div class="lg:col-span-1">
+                <div class="image-placeholder industrial-border grayscale">
+                    <img src="founder-portrait.png" alt="Basith - Founder" onerror="this.style.display='none'; this.parentNode.innerHTML='[ Basith / Founder ]'">
+                </div>
+            </div>
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-black uppercase mb-6 tracking-tight italic">A Message from the Founder</h2>
+                <p class="text-xl text-slate-400 leading-relaxed mb-8">
+                    "I started TYPEX because I was tired of seeing the same operational bottlenecks go unsolved. Warehouse managers shouldn't have to be data scientists. You have trucks to load and targets to hit. I built this tool to be the quiet infrastructure that ensures your 8:00 AM starts are about moving boxes, not moving cells in a spreadsheet."
+                </p>
+                <div class="flex items-center gap-6">
+                    <div class="h-px w-20 bg-emerald-500"></div>
+                    <span class="mono text-emerald-500 font-bold uppercase tracking-widest text-sm">Basith | Founder, Logicuracy</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INBOUND TRIAL FORM -->
+    <section id="trial" class="section-padding bg-slate-900/50">
         <div class="max-w-4xl mx-auto px-6">
-            <div id="form-container" class="bg-black p-10 md:p-20 border border-emerald-500/20 shadow-2xl">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-black uppercase mb-4 italic">Get Early Access</h2>
-                    <p class="text-slate-500 uppercase text-[10px] font-bold tracking-[0.4em]">Managerial Verification Required</p>
+            <div id="form-card" class="bg-black p-10 md:p-20 industrial-border emerald-glow transition-all duration-700">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-black uppercase mb-4 italic tracking-tighter">Get Deployment Access</h2>
+                    <p class="text-slate-500 uppercase text-[10px] font-bold tracking-[0.4em]">Managerial Verification Required for Trial Credentials</p>
                 </div>
 
                 <form id="typex-form" action="https://formsubmit.co/basith@logicuracy.com" method="POST" class="grid md:grid-cols-2 gap-8">
+                    <!-- Security/Bot Prevention -->
                     <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_subject" value="URGENT: Trial Access Request - TYPEX">
+                    <input type="hidden" name="_subject" value="URGENT: Trial Access Request - TYPEX INDUSTRIAL">
 
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Manager Name</label>
-                            <input type="text" name="name" required placeholder="Alex Cornila" class="w-full">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-widest italic">Operations Manager</label>
+                            <input type="text" name="name" required placeholder="Full Name">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Warehouse / 3PL</label>
-                            <input type="text" name="warehouse" required placeholder="Facility Name" class="w-full">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-widest italic">Facility / 3PL Name</label>
+                            <input type="text" name="warehouse" required placeholder="Company Name">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Business Email</label>
-                            <input type="email" name="email" required placeholder="manager@warehouse.com" class="w-full">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-widest italic">Business Email Address</label>
+                            <input type="email" name="email" required placeholder="manager@warehouse.com">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">WMS Software</label>
-                            <input type="text" name="wms" required placeholder="e.g. Manhattan, ShipHero" class="w-full">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-widest italic">Order Volume / Day</label>
+                            <select name="volume">
+                                <option>100 - 1,000 orders/day</option>
+                                <option>1,000 - 5,000 orders/day</option>
+                                <option>5,000+ orders/day</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="md:col-span-2 mt-6 text-center">
-                        <button type="submit" class="btn-industrial w-full">Request Offline Executable</button>
-                        <p class="mt-8 text-[9px] text-slate-600 uppercase font-black tracking-widest leading-loose">
-                            Sovereign Data Protocol Enabled. No PII Data is stored or transmitted by TYPEX.
+                    <div class="md:col-span-2 mt-8">
+                        <button type="submit" class="btn-primary w-full text-center">
+                            Initialize Industrial Trial Access
+                        </button>
+                        <p class="text-center text-[9px] text-slate-700 mt-10 uppercase font-black tracking-[0.25em] leading-relaxed">
+                            Logicuracy Data Sovereignty Protocols Enforced. No PII data is transmitted or stored by our tools.
                         </p>
                     </div>
                 </form>
 
-                <!-- Post-Submission Message -->
-                <div id="thank-you" class="hidden text-center py-10">
-                    <div class="text-emerald-500 mb-6">
-                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <!-- SUCCESS MESSAGE -->
+                <div id="thank-you" class="hidden text-center py-20 animate-fade-in">
+                    <div class="w-24 h-24 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-10 shadow-2xl">
+                        <svg class="w-12 h-12 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <h3 class="text-2xl font-black uppercase mb-4">Request Logged</h3>
-                    <p class="text-slate-400">Thanks for your request. Founder Basith will reach out to you soon with your trial deployment details.</p>
+                    <h3 class="text-4xl font-black uppercase mb-6 italic tracking-tighter">Request Logged.</h3>
+                    <p class="text-slate-400 text-xl max-w-lg mx-auto leading-relaxed mb-10">
+                        "Thanks for your request. Basith will reach out to you personally to coordinate your offline deployment."
+                    </p>
+                    <div class="mono text-[10px] text-emerald-500 uppercase tracking-widest animate-pulse">Awaiting Operational Verification...</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 bg-black border-t border-slate-900 text-center">
-        <p class="text-[9px] font-bold text-slate-700 tracking-[0.5em] uppercase">
-            © 2026 LOGICURACY All Rights Reserved
-        </p>
+    <!-- FOOTER -->
+    <footer class="py-20 bg-black border-t border-white/5 text-center px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-center gap-4 mb-10 opacity-30 grayscale">
+                <div class="w-8 h-8 bg-white flex items-center justify-center font-black text-black">T</div>
+                <span class="text-xl font-black uppercase tracking-tighter italic">TYPEX Logicuracy</span>
+            </div>
+            <p class="text-[10px] font-bold text-slate-800 tracking-[0.5em] uppercase leading-loose">
+                © 2024 LOGICURACY INDUSTRIAL SYSTEMS | All Rights Reserved
+            </p>
+        </div>
     </footer>
 
     <script>
+        // FORM INTERACTION
         const form = document.getElementById('typex-form');
+        const formCard = document.getElementById('form-card');
         const thankYou = document.getElementById('thank-you');
 
         form.onsubmit = function(e) {
-            // Give it a split second to send the data via formsubmit
+            // We give it a moment to send the data to FormSubmit
             setTimeout(() => {
+                form.style.opacity = '0';
+                form.style.pointerEvents = 'none';
+                
+                // Hide the form and headings
+                document.querySelectorAll('#form-card > div:not(#thank-you)').forEach(el => el.classList.add('hidden'));
                 form.classList.add('hidden');
+                
+                // Show Success Message
                 thankYou.classList.remove('hidden');
-                document.querySelector('#form-container h2').classList.add('hidden');
-                document.querySelector('#form-container p').classList.add('hidden');
-            }, 500);
+                formCard.style.borderColor = '#10b981';
+                
+                // Scroll to message
+                thankYou.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 600);
         };
+
+        // NAVIGATION BACKGROUND BLEND
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(2, 6, 23, 0.95)';
+            } else {
+                nav.style.backgroundColor = 'rgba(2, 6, 23, 0.90)';
+            }
+        });
     </script>
 
 </body>
