@@ -150,15 +150,20 @@
                         <p class="text-slate-400 text-sm">Fill out the details below to see how TYPEX cleans warehouse files in seconds.</p>
                     </div>
 
-                    <form id="typex-form" class="space-y-6">
+                    <!-- Configured to silently send details to your email id -->
+                    <form id="typex-form" action="https://formsubmit.co/basith@logicuracy.com" method="POST" class="space-y-6">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_subject" value="New Lead: Video Audit Request">
+
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1">Full Name</label>
                             <input 
                                 type="text" 
                                 id="name"
+                                name="Name"
                                 required 
                                 placeholder="Alexander Vance" 
-                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm text-white"
                             >
                         </div>
 
@@ -167,9 +172,10 @@
                             <input 
                                 type="email" 
                                 id="email"
+                                name="Email"
                                 required 
                                 placeholder="vance@warehouse.com" 
-                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm text-white"
                             >
                         </div>
 
@@ -181,19 +187,20 @@
                         </button>
                         
                         <p class="text-[10px] text-center text-slate-600 uppercase tracking-widest pt-2">
-                            Secure Browser-Side Encryption Enabled
+                            Secure Integration Enabled
                         </p>
                     </form>
                 </div>
 
+                <!-- Animated Custom Thanks Message Box -->
                 <div id="success-state" class="success-state py-12 text-center">
                     <div class="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
                         <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2">Transmission Sent</h3>
-                    <p class="text-slate-400 text-sm px-6">We've dispatched the Typex Workflow Video to your inbox. Please check your mail.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2">Thanks!</h3>
+                    <p class="text-slate-400 text-sm px-6">We've received your message and will send the video audit link to your email soon.</p>
                     
                     <button onclick="resetForm()" class="mt-10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-colors">
                         Return to Terminal
@@ -210,69 +217,50 @@
         </p>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global config provided by environment
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'typex-enterprise';
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let currentUser = null;
-
-        signInAnonymously(auth).catch(console.error);
-        onAuthStateChanged(auth, (user) => {
-            if (user) currentUser = user;
-        });
-
+    <!-- The Javascript Engine handling background delivery & UI transforms -->
+    <script>
         const form = document.getElementById('typex-form');
         const formContent = document.getElementById('form-content');
         const successState = document.getElementById('success-state');
 
         form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+            e.preventDefault(); 
             
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-
-            // Prevent submission if not authenticated
-            if (!currentUser) return;
+            const formData = new FormData(form);
 
             try {
-                // Save to leads collection at the required path
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
-                    name: name,
-                    email: email,
-                    recipient: 'basith@logicuracy.com', // Internal routing tag
-                    timestamp: serverTimestamp(),
-                    status: 'pending_dispatch'
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
 
-                // UI Animation Sequence
-                formContent.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                formContent.style.opacity = '0';
-                formContent.style.transform = 'translateY(20px) scale(0.95)';
+                if (response.ok) {
+                    formContent.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    formContent.style.opacity = '0';
+                    formContent.style.transform = 'translateY(20px) scale(0.95)';
 
-                setTimeout(() => {
-                    formContent.style.display = 'none';
-                    successState.style.display = 'block';
-                    
-                    successState.style.opacity = '0';
-                    successState.style.transform = 'translateY(-20px)';
-                    
-                    requestAnimationFrame(() => {
-                        successState.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                        successState.style.opacity = '1';
-                        successState.style.transform = 'translateY(0)';
-                    });
-                }, 500);
+                    setTimeout(() => {
+                        formContent.style.display = 'none';
+                        successState.style.display = 'block';
+                        
+                        successState.style.opacity = '0';
+                        successState.style.transform = 'translateY(-20px)';
+                        
+                        requestAnimationFrame(() => {
+                            successState.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                            successState.style.opacity = '1';
+                            successState.style.transform = 'translateY(0)';
+                        });
+                    }, 500);
+                } else {
+                    alert("Submission failed. Please check network.");
+                }
             } catch (error) {
                 console.error("Transmission error:", error);
+                alert("An error occurred during dispatch.");
             }
         });
 
