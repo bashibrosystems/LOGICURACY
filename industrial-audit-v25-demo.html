@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPEX Enterprise | Logicuracy Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --brand-dark: #050507;
+            --brand-violet: #6366f1;
+            --brand-surface: #0f1014;
+            --accent-green: #10b981;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--brand-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(15, 16, 20, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 30%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-input {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+        }
+
+        .form-input:focus {
+            background: rgba(99, 102, 241, 0.05);
+            border-color: var(--brand-violet);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        .btn-enterprise {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-enterprise:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .success-state {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8">
+    
+    <!-- Background Decor -->
+    <div class="glow-orb top-[-200px] left-[-200px]"></div>
+    <div class="glow-orb bottom-[-200px] right-[-200px]"></div>
+
+    <main class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Content: Message & Info -->
+        <div class="lg:col-span-7 space-y-8">
+            <div class="inline-flex items-center space-x-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-4">
+                <span class="status-dot"></span>
+                <span class="terminal-text text-[10px] uppercase tracking-widest text-indigo-300">System Status: Enterprise Grade V25</span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15]">
+                We've officially rendered our move to <span class="gradient-text">Enterprise Grade.</span>
+            </h1>
+
+            <p class="text-slate-400 text-lg leading-relaxed max-w-xl">
+                We've upgraded from our normal version to full enterprise-grade architecture to ensure the system <span class="text-white font-medium">never breaks</span> under heavy warehouse loads. 
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                <div class="flex items-start space-x-4">
+                    <div class="mt-1 w-5 h-5 rounded bg-indigo-500/20 flex items-center justify-center border border-indigo-500/40">
+                        <svg class="w-3 h-3 text-indigo-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider">Direct Delivery</h4>
+                        <p class="text-xs text-slate-500 mt-1">Get the Typex workflow video straight to your corporate inbox.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="mt-1 w-5 h-5 rounded bg-indigo-500/20 flex items-center justify-center border border-indigo-500/40">
+                        <svg class="w-3 h-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider">Privacy First</h4>
+                        <p class="text-xs text-slate-500 mt-1">Browser-side reconciliation. No data leaves your facility.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Content: The Form Card -->
+        <div class="lg:col-span-5">
+            <div class="glass-panel p-8 md:p-10 rounded-[40px] relative overflow-hidden">
+                <div id="form-content">
+                    <div class="mb-10">
+                        <h3 class="text-2xl font-bold text-white mb-2">Get the Video</h3>
+                        <p class="text-slate-400 text-sm">Fill out the details below to see how TYPEX cleans warehouse files in seconds.</p>
+                    </div>
+
+                    <form id="typex-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1">Full Name</label>
+                            <input 
+                                type="text" 
+                                id="name"
+                                required 
+                                placeholder="Alexander Vance" 
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
+                            >
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1">Corporate Email</label>
+                            <input 
+                                type="email" 
+                                id="email"
+                                required 
+                                placeholder="vance@warehouse.com" 
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
+                            >
+                        </div>
+
+                        <button type="submit" class="w-full btn-enterprise text-white font-bold py-5 rounded-2xl flex items-center justify-center space-x-3 group mt-4">
+                            <span>Get Video Demo</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                        
+                        <p class="text-[10px] text-center text-slate-600 uppercase tracking-widest pt-2">
+                            Secure Browser-Side Encryption Enabled
+                        </p>
+                    </form>
+                </div>
+
+                <div id="success-state" class="success-state py-12 text-center">
+                    <div class="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
+                        <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Transmission Sent</h3>
+                    <p class="text-slate-400 text-sm px-6">We've dispatched the Typex Workflow Video to your inbox. Please check your mail.</p>
+                    
+                    <button onclick="resetForm()" class="mt-10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-colors">
+                        Return to Terminal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Tag -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 text-center opacity-30">
+        <p class="terminal-text text-[9px] uppercase tracking-[0.4em] text-white">
+            TYPEX // Logicuracy © 2026
+        </p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global config provided by environment
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'typex-enterprise';
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUser = null;
+
+        signInAnonymously(auth).catch(console.error);
+        onAuthStateChanged(auth, (user) => {
+            if (user) currentUser = user;
+        });
+
+        const form = document.getElementById('typex-form');
+        const formContent = document.getElementById('form-content');
+        const successState = document.getElementById('success-state');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            // Prevent submission if not authenticated
+            if (!currentUser) return;
+
+            try {
+                // Save to leads collection at the required path
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
+                    name: name,
+                    email: email,
+                    recipient: 'basith@logicuracy.com', // Internal routing tag
+                    timestamp: serverTimestamp(),
+                    status: 'pending_dispatch'
+                });
+
+                // UI Animation Sequence
+                formContent.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                formContent.style.opacity = '0';
+                formContent.style.transform = 'translateY(20px) scale(0.95)';
+
+                setTimeout(() => {
+                    formContent.style.display = 'none';
+                    successState.style.display = 'block';
+                    
+                    successState.style.opacity = '0';
+                    successState.style.transform = 'translateY(-20px)';
+                    
+                    requestAnimationFrame(() => {
+                        successState.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        successState.style.opacity = '1';
+                        successState.style.transform = 'translateY(0)';
+                    });
+                }, 500);
+            } catch (error) {
+                console.error("Transmission error:", error);
+            }
+        });
+
+        window.resetForm = function() {
+            successState.style.opacity = '0';
+            setTimeout(() => {
+                successState.style.display = 'none';
+                formContent.style.display = 'block';
+                formContent.style.opacity = '1';
+                formContent.style.transform = 'translateY(0) scale(1)';
+                form.reset();
+            }, 300);
+        }
+    </script>
+</body>
+</html>
