@@ -91,20 +91,21 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        .success-state {
+        /* Initial state for the success message */
+        #success-state {
             display: none;
+            opacity: 0;
+            transform: translateY(20px);
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 md:p-8">
     
-    <!-- Background Decor -->
     <div class="glow-orb top-[-200px] left-[-200px]"></div>
     <div class="glow-orb bottom-[-200px] right-[-200px]"></div>
 
     <main class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
-        <!-- Left Content: Message & Info -->
         <div class="lg:col-span-7 space-y-8">
             <div class="inline-flex items-center space-x-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-4">
                 <span class="status-dot"></span>
@@ -141,29 +142,23 @@
             </div>
         </div>
 
-        <!-- Right Content: The Form Card -->
         <div class="lg:col-span-5">
-            <div class="glass-panel p-8 md:p-10 rounded-[40px] relative overflow-hidden">
+            <div class="glass-panel p-8 md:p-10 rounded-[40px] relative overflow-hidden min-h-[450px] flex flex-col justify-center">
+                
                 <div id="form-content">
                     <div class="mb-10">
                         <h3 class="text-2xl font-bold text-white mb-2">Get the Video</h3>
                         <p class="text-slate-400 text-sm">Fill out the details below to see how TYPEX cleans warehouse files in seconds.</p>
                     </div>
 
-                    <!-- Configured to silently send details to your email id -->
-                    <form id="typex-form" action="https://formsubmit.co/basith@logicuracy.com" method="POST" class="space-y-6">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_subject" value="New Lead: Video Audit Request">
-
+                    <form id="typex-form" class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1">Full Name</label>
                             <input 
                                 type="text" 
-                                id="name"
-                                name="Name"
                                 required 
                                 placeholder="Alexander Vance" 
-                                class="form-input w-full px-5 py-4 rounded-2xl text-sm text-white"
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
                             >
                         </div>
 
@@ -171,11 +166,9 @@
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] ml-1">Corporate Email</label>
                             <input 
                                 type="email" 
-                                id="email"
-                                name="Email"
                                 required 
                                 placeholder="vance@warehouse.com" 
-                                class="form-input w-full px-5 py-4 rounded-2xl text-sm text-white"
+                                class="form-input w-full px-5 py-4 rounded-2xl text-sm"
                             >
                         </div>
 
@@ -185,93 +178,74 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </button>
-                        
-                        <p class="text-[10px] text-center text-slate-600 uppercase tracking-widest pt-2">
-                            Secure Integration Enabled
-                        </p>
                     </form>
                 </div>
 
-                <!-- Animated Custom Thanks Message Box -->
-                <div id="success-state" class="success-state py-12 text-center">
+                <div id="success-state" class="text-center">
                     <div class="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
                         <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2">Thanks!</h3>
-                    <p class="text-slate-400 text-sm px-6">We've received your message and will send the video audit link to your email soon.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2">Yeah, Thanks!</h3>
+                    <p class="text-slate-400 text-sm px-6">We've received your request and will send the video audit link to your email soon.</p>
                     
                     <button onclick="resetForm()" class="mt-10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-colors">
                         Return to Terminal
                     </button>
                 </div>
+
             </div>
         </div>
     </main>
 
-    <!-- Footer Tag -->
     <div class="fixed bottom-8 left-1/2 -translate-x-1/2 text-center opacity-30">
         <p class="terminal-text text-[9px] uppercase tracking-[0.4em] text-white">
             TYPEX // Logicuracy © 2026
         </p>
     </div>
 
-    <!-- The Javascript Engine handling background delivery & UI transforms -->
     <script>
         const form = document.getElementById('typex-form');
         const formContent = document.getElementById('form-content');
         const successState = document.getElementById('success-state');
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault(); 
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop page refresh
             
-            const formData = new FormData(form);
+            // 1. Fade out the form
+            formContent.style.transition = 'all 0.4s ease';
+            formContent.style.opacity = '0';
+            formContent.style.transform = 'translateY(-10px)';
 
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    formContent.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                    formContent.style.opacity = '0';
-                    formContent.style.transform = 'translateY(20px) scale(0.95)';
-
-                    setTimeout(() => {
-                        formContent.style.display = 'none';
-                        successState.style.display = 'block';
-                        
-                        successState.style.opacity = '0';
-                        successState.style.transform = 'translateY(-20px)';
-                        
-                        requestAnimationFrame(() => {
-                            successState.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                            successState.style.opacity = '1';
-                            successState.style.transform = 'translateY(0)';
-                        });
-                    }, 500);
-                } else {
-                    alert("Submission failed. Please check network.");
-                }
-            } catch (error) {
-                console.error("Transmission error:", error);
-                alert("An error occurred during dispatch.");
-            }
+            setTimeout(() => {
+                // 2. Switch the display
+                formContent.style.display = 'none';
+                successState.style.display = 'block';
+                
+                // 3. Fade in the success message
+                setTimeout(() => {
+                    successState.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    successState.style.opacity = '1';
+                    successState.style.transform = 'translateY(0)';
+                }, 50);
+            }, 400);
         });
 
+        // Function to go back to the form if they want to enter details again
         window.resetForm = function() {
+            successState.style.transition = 'all 0.3s ease';
             successState.style.opacity = '0';
+            
             setTimeout(() => {
                 successState.style.display = 'none';
                 formContent.style.display = 'block';
-                formContent.style.opacity = '1';
-                formContent.style.transform = 'translateY(0) scale(1)';
                 form.reset();
+                
+                setTimeout(() => {
+                    formContent.style.opacity = '1';
+                    formContent.style.transform = 'translateY(0)';
+                }, 50);
             }, 300);
         }
     </script>
