@@ -95,6 +95,13 @@
             color: #059669;
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
+
+        /* Styling for the Logo placeholder */
+        .company-logo {
+            max-height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -102,8 +109,16 @@
     <!-- NAVIGATION -->
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">T</div>
+            <div class="flex items-center gap-3">
+                <!-- LOGO PLACEHOLDER: Replace src="companylogo.png" with your actual filename -->
+                <div class="flex items-center justify-center">
+                    <img 
+                        src="companylogo.png" 
+                        alt="TYPEX Logo" 
+                        class="company-logo"
+                        onerror="this.onerror=null; this.src='https://placehold.co/40x40/6366f1/ffffff?text=T'; this.classList.add('rounded-lg')"
+                    >
+                </div>
                 <span class="heading-font text-2xl tracking-tighter text-slate-900">TYPEX</span>
             </div>
             <div class="hidden md:flex gap-8 items-center font-semibold text-sm text-slate-600">
@@ -408,8 +423,14 @@
     <!-- FOOTER -->
     <footer class="py-12 bg-white border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">T</div>
+            <div class="flex items-center gap-3">
+                <!-- FOOTER LOGO PLACEHOLDER -->
+                <img 
+                    src="companylogo.png" 
+                    alt="TYPEX Logo" 
+                    class="h-8 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition duration-300"
+                    onerror="this.onerror=null; this.src='https://placehold.co/32x32/6366f1/ffffff?text=T'; this.classList.add('rounded-md')"
+                >
                 <span class="heading-font text-xl tracking-tighter text-slate-900">TYPEX</span>
             </div>
             <div class="text-sm text-slate-400 font-medium">
