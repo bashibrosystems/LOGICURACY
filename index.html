@@ -3,459 +3,672 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TYPEX | Automatic SKU Reconciliation for 3PLs</title>
+    <title>Mohamed Basith | Your Solo Tech Partner</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter (for UI) & Georgia/Lora style serif for readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            goldDark: '#AA7C11',
+                            charcoal: '#09090B',
+                            card: '#111113',
+                            border: '#1F1F23',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --brand-primary: #6366f1; /* Indigo */
-            --brand-secondary: #f43f5e; /* Rose */
-            --brand-accent: #10b981; /* Emerald */
-            --text-dark: #0f172a;
-            --text-light: #64748b;
-        }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #ffffff; 
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3, h4, .heading-font { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            font-weight: 800;
-            letter-spacing: -0.02em; 
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 40%, #D4AF37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .step-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #f1f5f9;
-            background: white;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05);
-            border-color: var(--brand-primary);
+        ::-webkit-scrollbar-track {
+            background: #09090B;
         }
-
-        .btn-primary {
-            background: var(--brand-primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        ::-webkit-scrollbar-thumb {
+            background: #1F1F23;
+            border-radius: 3px;
         }
-
-        .btn-primary:hover {
-            background: #4f46e5;
-            transform: scale(1.02);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
-        }
-
-        .pill {
-            background: #f1f5f9;
-            color: var(--brand-primary);
-            padding: 6px 16px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: inline-block;
-        }
-
-        .input-field {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1rem;
-            width: 100%;
-            transition: border-color 0.2s ease;
-        }
-
-        .input-field:focus {
-            border-color: var(--brand-primary);
-            outline: none;
-            background: #fff;
-        }
-
-        .security-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .company-logo {
-            height: 32px;
-            width: auto;
-            object-fit: contain;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-[#09090B] text-neutral-300 font-sans antialiased overflow-x-hidden">
 
-    <!-- NAVIGATION -->
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img 
-                    src="companylogo.png" 
-                    alt="TYPEX Logo" 
-                    class="company-logo"
-                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/6366f1/ffffff?text=T'; this.classList.add('rounded-lg')"
-                >
-                <span class="heading-font text-xl tracking-tighter text-slate-900">TYPEX</span>
-            </div>
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#09090B]/95 border-b border-brand-border/80 transition-all">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="#" class="flex flex-col">
+                <span class="block text-white font-extrabold text-sm tracking-wider uppercase">Mohamed Basith</span>
+                <span class="block text-[9px] text-brand-gold tracking-widest uppercase font-semibold">Your Solo Tech Partner</span>
+            </a>
             
-            <div class="hidden md:flex gap-8 items-center font-semibold text-sm text-slate-600">
-                <a href="#security" class="hover:text-indigo-600 transition">Privacy First</a>
-                <a href="#how-it-works" class="hover:text-indigo-600 transition">The 3-Step Clean</a>
-                <a href="#problem" class="hover:text-indigo-600 transition">Common Errors</a>
-                <a href="#trial" class="btn-primary py-2.5 px-6 text-xs">Start Free Trial</a>
-            </div>
-        </div>
-    </nav>
+            <nav class="hidden md:flex items-center space-x-6 text-[11px] font-bold tracking-wider uppercase text-neutral-400">
+                <a href="#the-issue" class="hover:text-white transition-colors">The Problem</a>
+                <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+                <a href="#comparison" class="hover:text-white transition-colors">Why It Beats Hiring</a>
+                <a href="#promise" class="hover:text-white transition-colors">My Promise</a>
+            </nav>
 
-    <!-- HERO SECTION -->
-    <section class="pt-48 pb-20 overflow-hidden">
-        <div class="max-w-4xl mx-auto px-6 flex flex-col items-center text-center">
-            <div class="mb-8">
-                <span class="pill">Offline-First Warehouse Security</span>
-            </div>
-            
-            <h1 class="text-5xl md:text-7xl mb-8 tracking-tight leading-[1.1]">
-                Fix <span class="gradient-text">broken order files</span> <br>before they hit your WMS.
-            </h1>
-            
-            <p class="text-xl text-slate-500 mb-12 max-w-2xl mx-auto">
-                Clean up client spreadsheets automatically. Resolve API characters and SKU typos locally—ensuring your data never leaves your facility.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-                <a href="#trial" class="btn-primary text-lg px-12">
-                    Secure Setup
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            <div>
+                <a href="#contact" class="inline-flex items-center justify-center px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-brand-charcoal bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark rounded hover:shadow-lg hover:shadow-brand-gold/15 transition-all">
+                    Get Free Setup
                 </a>
             </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative py-12 md:py-20 px-4 sm:px-6 overflow-hidden">
+        <!-- Soft background glow for warm premium vibe -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] bg-brand-gold/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-900 border border-brand-border text-[9px] sm:text-[10px] font-extrabold tracking-widest text-brand-gold uppercase">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                NO AGENCIES. NO SPAM. JUST REAL BOOKED CLIENTS.
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white max-w-3xl mx-auto">
+                Stop letting your website leads slip away to <span class="gold-gradient-text italic font-normal font-serif">Voicemail.</span>
+            </h1>
+
+            <p class="text-sm sm:text-base md:text-lg text-neutral-300 font-normal leading-relaxed max-w-2xl mx-auto">
+                When a customer fills out your website contact form, they want a reply <strong class="text-white font-bold">right now</strong>. If you take hours to get back to them, they leave and book your nearest competitor. 
+            </p>
             
-            <!-- Terminal UI Component -->
-            <div class="relative w-full max-w-5xl mx-auto">
-                <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 p-4">
-                    <div class="rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 aspect-video flex flex-col">
-                        <div class="h-12 bg-white border-b border-slate-200 flex items-center px-6 justify-between">
-                            <div class="flex gap-2">
-                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                            </div>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Typex Offline Terminal</span>
-                            <div class="w-12"></div>
-                        </div>
-                        <div class="p-8 md:p-12 text-left flex flex-col justify-center h-full">
-                            <div class="grid grid-cols-2 gap-8 mb-10">
-                                <div class="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center bg-white shadow-sm">
-                                    <div class="text-indigo-600 mb-3">
-                                        <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    </div>
-                                    <div class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Master SKU File</div>
-                                </div>
-                                <div class="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center bg-white shadow-sm">
-                                    <div class="text-indigo-600 mb-3">
-                                        <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m-8-2h12a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2"></path></svg>
-                                    </div>
-                                    <div class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Daily Order File</div>
-                                </div>
-                            </div>
-                            <div class="flex flex-col md:flex-row items-center justify-between bg-white p-5 border border-slate-200 rounded-2xl shadow-inner gap-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    <span class="text-sm font-bold text-slate-700">Ready to Reconcile (Local Environment)</span>
-                                </div>
-                                <button class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-8 py-3.5 rounded-xl font-bold transition shadow-lg shadow-indigo-200">CHECK & RECONCILE</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Decorative Glows -->
-                <div class="absolute -z-10 -top-20 -left-20 w-64 h-64 bg-indigo-200/40 blur-3xl rounded-full"></div>
-                <div class="absolute -z-10 -bottom-20 -right-20 w-64 h-64 bg-rose-200/40 blur-3xl rounded-full"></div>
+            <p class="text-sm sm:text-base md:text-lg text-neutral-300 font-normal leading-relaxed max-w-2xl mx-auto">
+                I build a simple system for your business that replies to every single inquiry in <span class="text-brand-gold font-bold underline decoration-brand-gold decoration-2 underline-offset-4">under 20 seconds</span> and books them onto your calendar automatically.
+            </p>
+
+            <!-- Zero-Dollar Trust Shield Banner -->
+            <div class="p-5 sm:p-6 rounded-xl bg-neutral-900/90 border border-brand-border max-w-xl mx-auto text-left space-y-3 shadow-xl">
+                <p class="text-[10px] sm:text-[11px] font-extrabold tracking-widest text-brand-gold uppercase flex items-center gap-2">
+                    <svg class="w-4 h-4 text-brand-gold flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    I WILL BUILD YOUR PROTOTYPE FOR FREE FIRST
+                </p>
+                <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed font-serif">
+                    "I know you get spammed by robotic marketing agencies promising the world. <strong class="text-white font-bold text-xs sm:text-sm">I am not an agency.</strong> I am a single developer. Before you pay me a single dollar, I will personally build a real, working system for your website. If you love it, we work together. If not, you walk away."
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#contact" class="w-full sm:w-auto text-center px-6 py-4 text-xs font-extrabold uppercase tracking-widest text-brand-charcoal bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark rounded hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-brand-gold/10">
+                    Get Your Free Prototype
+                </a>
+                <a href="#how-it-works" class="w-full sm:w-auto text-center px-6 py-4 text-xs font-extrabold uppercase tracking-widest border border-brand-border hover:border-brand-gold hover:text-white text-neutral-400 rounded transition-all">
+                    See How It Works
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- SECURITY SECTION -->
-    <section id="security" class="py-24 bg-slate-50 border-y border-slate-100 overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="relative">
-                    <div class="inline-block px-4 py-2 rounded-full security-badge text-[10px] font-bold uppercase tracking-widest mb-6">
-                        Enterprise Security Protocol
-                    </div>
-                    <h2 class="text-4xl md:text-5xl mb-8 leading-tight text-slate-900">Your client data is <span class="text-emerald-600">too sensitive</span> for the cloud.</h2>
-                    <p class="text-slate-600 text-lg mb-12 leading-relaxed">
-                        Most tools require you to upload internal SKU lists and customer addresses to their servers. We don't. TYPEX is built on an <strong>"Offline-First" architecture.</strong>
-                    </p>
-                    
-                    <div class="space-y-10">
-                        <div class="flex gap-6">
-                            <div class="flex-shrink-0 w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center shadow-sm">
-                                <svg class="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-slate-900">Zero-Cloud Storage</h4>
-                                <p class="text-slate-500 leading-relaxed">Our reconciliation logic runs entirely in your browser memory. Your CSVs and Excel files are processed locally and deleted the moment you close the tab.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="flex-shrink-0 w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center shadow-sm">
-                                <svg class="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-slate-900">Internet-Independent</h4>
-                                <p class="text-slate-500 leading-relaxed">Even if your warehouse Wi-Fi goes down, TYPEX keeps working. No downtime during peak periods because you aren't waiting on a remote server.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- THE PROBLEM (VOICEMAIL & DELAYS COST YOU A FORTUNE) -->
+    <section id="the-issue" class="py-14 bg-[#0B0B0C] border-y border-brand-border/60">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 
-                <div class="lg:ml-12">
-                    <div class="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-2xl relative">
-                        <div class="text-emerald-600 mb-8 uppercase text-[10px] font-black tracking-[0.2em]">Security Audit Log</div>
-                        
-                        <div class="space-y-6 font-mono text-sm">
-                            <div class="flex justify-between border-b border-slate-100 pb-4">
-                                <span class="text-slate-400">Local Processing:</span>
-                                <span class="text-emerald-600 font-bold">● ACTIVE</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-4">
-                                <span class="text-slate-400">Encryption:</span>
-                                <span class="text-slate-900 font-bold">AES-256 (Client-Side)</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-4">
-                                <span class="text-slate-400">Cloud Storage:</span>
-                                <span class="text-rose-500 font-bold">DISABLED</span>
-                            </div>
-                            <div class="flex justify-between pb-2">
-                                <span class="text-slate-400">Data Residency:</span>
-                                <span class="text-slate-900 font-bold uppercase">On-Prem Browser</span>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-10 p-8 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-600 leading-relaxed">
-                            "In 3 years of 3PL management, we've never seen an uploader this fast. The fact that it's offline makes the security team actually let us use it."
-                        </div>
-                        
-                        <div class="mt-8 flex items-center justify-center gap-2">
-                             <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">System verified by Logicuracy Labs</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="absolute inset-0 opacity-[0.02] pointer-events-none" style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 30px 30px;"></div>
-    </section>
-
-    <!-- COMMON ERRORS SECTION -->
-    <section id="problem" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div>
-                    <h2 class="text-4xl mb-8">Why do order files keep breaking?</h2>
-                    <p class="text-lg text-slate-600 mb-10 leading-relaxed">
-                        Your WMS expects perfect data, but the sources of that data are chaotic. Manual intervention is the hidden cost of scaling.
-                    </p>
-                    <div class="space-y-6">
-                        <div class="bg-slate-50 p-8 rounded-2xl border-l-4 border-rose-500">
-                            <h4 class="font-bold text-slate-900 mb-3">API Encoding Errors</h4>
-                            <p class="text-slate-500">Shopify or Amazon APIs often spit out weird characters (like %20 or &#8211;) in descriptions. Your WMS rejects these instantly, stalling your floor operations.</p>
-                        </div>
-                        <div class="bg-slate-50 p-8 rounded-2xl border-l-4 border-rose-500">
-                            <h4 class="font-bold text-slate-900 mb-3">"Fat-Finger" Human Errors</h4>
-                            <p class="text-slate-500">Customers often mistype SKUs (e.g., "HOOD-XL" vs "HOODIE-XL"). If it doesn't match your master list exactly, labels won't print and lines stop moving.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative">
-                    <div class="bg-indigo-50 rounded-[3rem] p-12 border border-indigo-100 shadow-sm relative">
-                        <div class="absolute -top-6 -left-6 bg-white w-14 h-14 rounded-2xl shadow-lg flex items-center justify-center text-indigo-600 text-2xl font-black italic">"</div>
-                        <h4 class="heading-font text-indigo-900 mb-6 uppercase tracking-widest text-xs font-black italic">Manager's Reality</h4>
-                        <p class="text-indigo-900/70 text-xl md:text-2xl leading-relaxed italic">
-                            "When an order file is broken, you have pickers standing in the aisles at $25/hour while an operations manager spends 45 minutes doing manual corrections. <strong>That's not just a typo—it's a profit leak.</strong>"
+                <div class="md:col-span-7 space-y-4">
+                    <span class="text-[9px] uppercase tracking-widest text-red-500 font-extrabold block">The Hard Truth About Your Hard-Earned Leads</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white leading-tight">
+                        Busy business owners let high-paying clients slip straight into voicemail.
+                    </h2>
+                    <div class="space-y-4 text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                        <p>
+                            We get it. You are incredibly busy running your daily operations. When you are on a job, serving an existing client, or driving, you cannot pick up unknown calls. They automatically go to your <strong class="text-white font-semibold">voicemail box</strong>.
+                        </p>
+                        <p>
+                            But here is the catch: <strong class="text-white font-semibold">people hate leaving voicemails now</strong>. They want answers immediately. When a call goes to voicemail, they hang up, click back to Google, and call your competitor.
+                        </p>
+                        <p>
+                            Your website's contact form is your <strong class="text-white font-semibold">one final chance</strong> to catch them. If you take hours (or even 15 minutes) to check your email and write back, that customer is already gone.
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- STEP BY STEP SECTION -->
-    <section id="how-it-works" class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl mb-6 text-slate-900">Clean Data in 3 Clicks</h2>
-                <p class="text-slate-500 max-w-xl mx-auto text-lg">TYPEX gives you a perfect file with the exact same structure as the one you uploaded—just cleaned and reconciled.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="p-10 rounded-3xl step-card">
-                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    </div>
-                    <h3 class="text-2xl mb-4 font-bold text-slate-900">1. Dual Upload</h3>
-                    <p class="text-slate-500 leading-relaxed">Log in to your terminal. Use the two secure uploaders: one for your <strong>Master SKU File</strong> and one for your <strong>Daily Orders</strong>.</p>
-                </div>
-                <div class="p-10 rounded-3xl step-card">
-                    <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl mb-4 font-bold text-slate-900">2. Click "Check"</h3>
-                    <p class="text-slate-500 leading-relaxed">Our algorithms scan every row locally. We resolve mismatches and encoding bugs instantly without altering your column structure.</p>
-                </div>
-                <div class="p-10 rounded-3xl step-card">
-                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl mb-4 font-bold text-slate-900">3. Perfect Output</h3>
-                    <p class="text-slate-500 leading-relaxed">Download a file with <strong>identical structure</strong>. It is now 100% reconciled and ready for immediate WMS injection.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- MESSAGE SECTION -->
-    <section class="py-24">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="bg-indigo-600 rounded-[3rem] p-12 md:p-20 text-white text-center relative overflow-hidden shadow-2xl">
-                <div class="relative z-10">
-                    <div class="mb-10">
-                        <span class="bg-white/20 text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest">A Message to Warehouse Managers</span>
-                    </div>
-                    <h2 class="text-3xl md:text-5xl mb-12 font-extrabold leading-tight">
-                        "Your job is to move goods, not clean up spreadsheets. TYPEX exists so your people can stay on the floor."
-                    </h2>
-                    <div class="flex flex-col items-center gap-4">
-                        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center font-bold text-2xl border-4 border-white/10 shadow-xl">B</div>
-                        <div class="text-center">
-                            <div class="font-bold text-xl tracking-tight">Mohammed Basith</div>
-                            <div class="text-indigo-200 text-sm font-medium mt-1 uppercase tracking-widest">Founder, Logicuracy</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Abstract Design Elements -->
-                <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 w-80 h-80 bg-indigo-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FREE TRIAL FORM -->
-    <section id="trial" class="py-24 bg-slate-900 text-white">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-4xl md:text-5xl mb-6">Deploy TYPEX to your Facility.</h2>
-            <p class="text-slate-400 mb-16 text-lg">Claim your 7-day free trial. Start cleaning files locally tomorrow morning.</p>
-            
-            <div id="form-container" class="bg-white rounded-[2.5rem] p-8 md:p-16 text-slate-900 shadow-2xl text-left">
-                <form id="typex-form" action="https://formsubmit.co/basith@logicuracy.com" method="POST">
-                    <input type="hidden" name="_captcha" value="false">
+                <!-- Pain point highlight box -->
+                <div class="md:col-span-5 bg-neutral-900 border border-brand-border rounded-xl p-5 sm:p-6 space-y-4 shadow-md">
+                    <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        Where You Are Losing Money:
+                    </h3>
                     
-                    <div class="grid md:grid-cols-2 gap-8 mb-10">
-                        <div class="space-y-6">
-                            <div>
-                                <label class="text-sm font-bold text-slate-700 ml-1 mb-2 block">Full Name</label>
-                                <input type="text" name="name" required class="input-field" placeholder="Operations Lead">
-                            </div>
-                            <div>
-                                <label class="text-sm font-bold text-slate-700 ml-1 mb-2 block">3PL Facility Name</label>
-                                <input type="text" name="warehouse" required class="input-field" placeholder="E.g. Logistics Central">
-                            </div>
+                    <div class="space-y-4 text-xs leading-relaxed">
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-red-500 font-extrabold text-sm">✕</span>
+                            <p class="text-neutral-300"><strong class="text-white font-semibold">The Voicemail Trap:</strong> You miss an unknown call, and it goes to voicemail. The caller hangs up instantly without leaving a message.</p>
                         </div>
-                        <div class="space-y-6">
-                            <div>
-                                <label class="text-sm font-bold text-slate-700 ml-1 mb-2 block">Corporate Email</label>
-                                <input type="email" name="email" required class="input-field" placeholder="manager@3pl.com">
-                            </div>
-                            <div>
-                                <label class="text-sm font-bold text-slate-700 ml-1 mb-2 block">Daily Order Volume</label>
-                                <select name="volume" class="input-field">
-                                    <option>100 - 1,000 orders</option>
-                                    <option>1,000 - 5,000 orders</option>
-                                    <option>5,000+ orders</option>
-                                </select>
-                            </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-red-500 font-extrabold text-sm">✕</span>
+                            <p class="text-neutral-300"><strong class="text-white font-semibold">The Contact Form Lag:</strong> They write to you, and you reply 2 hours later. By then, they have already booked with someone else.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-red-500 font-extrabold text-sm">✕</span>
+                            <p class="text-neutral-300"><strong class="text-white font-semibold">The Agency Trap:</strong> You hire a marketing agency. They charge thousands of dollars, set up messy generic spams, and then forget your name.</p>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary w-full justify-center text-xl py-6 rounded-2xl shadow-xl shadow-indigo-100">
-                        Claim My 7-Day Free Trial
-                    </button>
-                    <div class="mt-8 flex items-center justify-center gap-3 text-xs text-emerald-600 font-bold uppercase tracking-widest text-center">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        Secure Browser-Side Encryption Enabled
-                    </div>
-                </form>
-
-                <div id="thank-you" class="hidden py-16 text-center">
-                    <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-8">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <h3 class="text-3xl font-bold mb-4 text-slate-900">Request Logged.</h3>
-                    <p class="text-slate-500 text-lg">Our team will reach out within 2 hours to confirm your facility security requirements.</p>
                 </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE SIMULATOR (PROVING SPEED) -->
+    <section id="how-it-works" class="py-14 bg-[#09090B]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-xl mx-auto space-y-2 mb-10">
+                <span class="text-[9px] uppercase tracking-widest text-brand-gold font-extrabold block">Live Speed Test</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Test the Booking System in 20 Seconds</h2>
+                <p class="text-xs sm:text-sm text-neutral-400">
+                    Fill out this mock contact form below. Watch the simulated phone on the right instantly write a custom, smart response with an auto-booking link.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Interactive Form -->
+                <div class="lg:col-span-6 bg-neutral-900/60 border border-brand-border rounded-xl p-5 sm:p-6 space-y-4">
+                    <div class="flex items-center space-x-2 text-[8px] sm:text-[9px] text-neutral-400 uppercase tracking-widest font-black">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-gold"></span>
+                        <span>Your Mock Website Contact Form</span>
+                    </div>
+
+                    <form id="simulatorForm" class="space-y-4" onsubmit="runSimulator(event)">
+                        <div>
+                            <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">Your Name</label>
+                            <input type="text" id="simName" required placeholder="Alex Johnson" 
+                                   class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                        </div>
+
+                        <div>
+                            <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">What are you looking for?</label>
+                            <select id="simInquiry" class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-neutral-300 focus:outline-none focus:border-brand-gold transition-colors">
+                                <option value="urgent">"I have an urgent issue and need to talk to you right now."</option>
+                                <option value="price">"What are your prices and how do you charge?"</option>
+                                <option value="general">"I would like to explore a potential partnership next month."</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">Your Email Address</label>
+                            <input type="email" id="simEmail" required placeholder="alex@mybusiness.com" 
+                                   class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full py-3.5 text-[10px] font-extrabold uppercase tracking-widest text-brand-charcoal bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark rounded hover:brightness-110 transition-all">
+                            Submit Form & Check Reply Speed
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Simulation Visual Output Phone -->
+                <div class="lg:col-span-6 flex justify-center">
+                    <div class="w-full max-w-[290px] rounded-[32px] border-[5px] border-neutral-800 bg-neutral-950 p-2.5 shadow-2xl relative">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 h-3.5 w-20 bg-neutral-800 rounded-b-lg z-20"></div>
+
+                        <!-- Screen -->
+                        <div class="relative bg-neutral-900 rounded-[24px] p-3 pt-5 min-h-[300px] flex flex-col justify-between overflow-hidden text-xs border border-neutral-800/50">
+                            
+                            <div class="flex justify-between items-center text-[8px] text-neutral-500 font-mono tracking-wider mb-2">
+                                <span>SIMULATED PHONE</span>
+                                <span id="phoneClock">12:33 PM</span>
+                            </div>
+
+                            <div class="flex-grow flex flex-col justify-center" id="phoneBody">
+                                <!-- Default Idle State -->
+                                <div class="text-center space-y-2 py-4" id="idlePhoneState">
+                                    <div class="w-8 h-8 rounded-full bg-neutral-950 border border-brand-border flex items-center justify-center mx-auto text-neutral-600">
+                                        <svg class="w-4 h-4 animate-bounce text-brand-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-neutral-400">Ready for Test</p>
+                                        <p class="text-[8px] text-neutral-500 mt-0.5">Submit the form on the left to trigger the 20-second automatic response.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Running State -->
+                                <div class="hidden text-center space-y-2 py-4" id="runningPhoneState">
+                                    <div class="w-8 h-8 rounded-full bg-neutral-950 border border-brand-gold flex items-center justify-center mx-auto text-brand-gold animate-spin">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17.91M4 4l5 5m0-5L4 9"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-white">System Triggered...</p>
+                                        <p class="text-[8px] text-neutral-400 mt-0.5">Analyzing message context and writing customized email reply...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Completed Simulated Email -->
+                                <div class="hidden w-full text-left space-y-2" id="successPhoneState">
+                                    <div class="flex items-center space-x-1 p-0.5 px-1.5 bg-emerald-950/20 border border-emerald-900/30 rounded text-[8px] font-bold text-emerald-400 uppercase w-max">
+                                        <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span>Auto-Reply Received (18 seconds)</span>
+                                    </div>
+
+                                    <div class="bg-neutral-950 rounded-lg border border-brand-border p-2.5 space-y-1.5 text-[10px]">
+                                        <div class="border-b border-brand-border pb-1 text-[7px] text-neutral-500 space-y-0.5">
+                                            <p><span class="text-neutral-400">From:</span> info@yourbusiness.com</p>
+                                            <p><span class="text-neutral-400">To:</span> <span id="recipientEmail" class="text-neutral-300">alex@mybusiness.com</span></p>
+                                        </div>
+
+                                        <!-- Context-driven custom response -->
+                                        <p class="text-[9px] text-neutral-300 leading-relaxed font-serif">
+                                            "Hi <span id="recipientName" class="font-bold text-white">Alex</span>,<br><br>
+                                            Thank you for reaching out about <span id="selectedTopicText" class="text-brand-gold font-bold">your request</span>.<br><br>
+                                            Let's discuss this immediately. Grab a spot on my calendar for a quick <strong class="text-white font-semibold">5-minute strategy call</strong> here: <span class="text-brand-gold underline font-semibold">yourbusiness.com/quick-call</span>"
+                                        </p>
+
+                                        <div class="pt-1">
+                                            <button type="button" onclick="triggerSimulatedSuccess()" 
+                                                    class="w-full py-1.5 text-[8px] font-black tracking-widest uppercase text-brand-charcoal bg-gradient-to-r from-brand-gold to-brand-goldDark rounded">
+                                                Book 5-Min Strategy Call
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Home indicator bar -->
+                            <div class="w-12 h-0.5 bg-neutral-800 rounded-full mx-auto mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL VALUE / ESTIMATOR -->
+    <section class="py-14 bg-[#0B0B0C] border-y border-brand-border/60">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="bg-neutral-900/40 border border-brand-border rounded-xl p-5 sm:p-8 space-y-6">
+                <div class="max-w-lg">
+                    <span class="text-[9px] uppercase tracking-widest text-red-500 font-extrabold block mb-1">Simple Money Math</span>
+                    <h3 class="text-lg sm:text-xl font-black text-white">See How Much Money You Are Losing Right Now</h3>
+                    <p class="text-xs sm:text-sm text-neutral-400">Drag the sliders to see how much money slips away into your voicemail box because of simple response delays.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-2">
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="text-neutral-400">Monthly Website Leads Received</span>
+                                <span class="text-brand-gold font-extrabold font-serif" id="leadsVal">20 leads</span>
+                            </div>
+                            <input type="range" id="leadsRange" min="5" max="150" value="20" oninput="calculateLoss()" 
+                                   class="w-full accent-brand-gold bg-neutral-800 h-1 rounded cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="text-neutral-400">Average Job/Client Value</span>
+                                <span class="text-emerald-400 font-extrabold font-serif" id="customerVal">$2,500</span>
+                            </div>
+                            <input type="range" id="customerRange" min="500" max="15000" step="500" value="2500" oninput="calculateLoss()" 
+                                   class="w-full accent-brand-gold bg-neutral-800 h-1 rounded cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="bg-[#09090B] border border-brand-border p-5 rounded-lg flex flex-col justify-between text-center md:text-left shadow-inner">
+                        <div>
+                            <span class="text-[9px] font-black text-red-500 uppercase tracking-widest block mb-0.5">Estimated Monthly Lost Income</span>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-red-500" id="lostRevenueDisplay">$3,000</div>
+                            <p class="text-[10px] sm:text-xs text-neutral-400 mt-2 leading-relaxed">
+                                This is real money lost to competitors because of missed phone calls and laggy email response times. My system stops this loss instantly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECEPTIONIST VS AUTO-SYSTEM COMPARISON -->
+    <section id="comparison" class="py-14 bg-[#09090B]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-xl mx-auto space-y-2 mb-10">
+                <span class="text-[9px] uppercase tracking-widest text-brand-gold font-extrabold block">The Financial Reality</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Cheaper and Smarter Than Hiring</h2>
+                <p class="text-xs sm:text-sm text-neutral-400">
+                    Why hiring traditional staff or full-time receptionists costs you more while capturing fewer leads.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                <!-- Part-Time Receptionist -->
+                <div class="bg-neutral-900/30 border border-brand-border p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs sm:text-sm font-bold text-neutral-400 uppercase tracking-wider">US Part-Time Receptionist</h3>
+                            <span class="text-red-400 font-bold text-xs font-mono">~$2,500+/month</span>
+                        </div>
+                        <ul class="space-y-3.5 text-xs sm:text-sm text-neutral-400">
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-red-500 text-xs">✕</span> <span>Only works 4 to 5 hours a day</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-red-500 text-xs">✕</span> <span>Misses all weekend and late-night inquiries</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-red-500 text-xs">✕</span> <span>Requires hands-on management, payroll, and training</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="text-[10px] sm:text-xs text-red-500/80 bg-red-950/10 p-2.5 rounded border border-red-900/20">
+                        Slow reaction times when busy, high running costs, and active only 20% of the week.
+                    </p>
+                </div>
+
+                <!-- My Automated System -->
+                <div class="bg-neutral-900/80 border border-brand-gold/30 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-6 relative shadow-lg">
+                    <div class="absolute -top-3 right-4 bg-gradient-to-r from-brand-gold to-brand-goldDark text-brand-charcoal text-[8px] sm:text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded">
+                        10x CHEAPER & 100% RELIABLE
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">My Solo Auto-Booking System</h3>
+                            <span class="text-emerald-400 font-bold text-xs font-mono">Tiny Fraction of Cost</span>
+                        </div>
+                        <ul class="space-y-3.5 text-xs sm:text-sm text-neutral-200">
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-emerald-400 text-xs">✓</span> <span>Instantly active 24/7/365 (Never sleeps)</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-emerald-400 text-xs">✓</span> <span>Replies to late-night and weekend leads instantly</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="text-emerald-400 text-xs">✓</span> <span>Delivers a custom booking link in under 20 seconds</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="text-[10px] sm:text-xs text-emerald-400 bg-emerald-950/20 p-2.5 rounded border border-emerald-900/25">
+                        Guaranteed to respond to every website lead immediately without fail.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MY PROMISE SIGNED LETTER WITH PROFILE PICTURE -->
+    <section id="promise" class="py-14 bg-[#0B0B0C] relative overflow-hidden border-y border-brand-border/60">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+            <div class="bg-neutral-900/50 border border-brand-border rounded-xl p-6 sm:p-10 space-y-8 relative shadow-xl">
+                
+                <div class="flex flex-col sm:flex-row items-center justify-between border-b border-brand-border pb-6 gap-4">
+                    <div>
+                        <span class="text-[8px] sm:text-[9px] uppercase tracking-widest text-brand-gold font-extrabold block mb-0.5">Genuine Guarantee</span>
+                        <h3 class="text-lg sm:text-xl font-bold text-white">An Honest, Direct Promise to Small Businesses</h3>
+                    </div>
+                    <div class="text-[9px] text-neutral-400 bg-neutral-900 border border-brand-border px-3 py-1 rounded font-mono uppercase tracking-widest font-extrabold">
+                        100% PERSONALIZED SOLO HELP
+                    </div>
+                </div>
+
+                <!-- Combined Content & Photo Section optimized for readability and scanning -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left: Profile picture frame placeholder -->
+                    <div class="md:col-span-4 flex flex-col items-center justify-center space-y-3">
+                        <div class="relative w-40 h-40 sm:w-48 sm:h-48 rounded-lg overflow-hidden border-2 border-brand-gold/60 shadow-lg bg-[#09090B] flex items-center justify-center group">
+                            <!-- High quality fallback/placeholder image -->
+                            <img id="profileImage" src="pfp.jpg" alt="Mohamed Basith Profile" class="w-full h-full object-cover rounded" onerror="this.style.display='none'; document.getElementById('imageFallback').classList.remove('hidden')">
+                            
+                            <!-- Elegant SVG silhouette default avatar if image is not replaced yet -->
+                            <div id="imageFallback" class="hidden absolute inset-0 flex flex-col items-center justify-center p-3 text-center space-y-2">
+                                <svg class="w-12 h-12 text-brand-gold/40" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                <span class="text-[9px] uppercase text-neutral-500 font-semibold tracking-wider">Mohamed Basith</span>
+                            </div>
+                        </div>
+                        <p class="text-[9px] sm:text-[10px] text-neutral-500 font-mono tracking-widest text-center uppercase">Lead Software Developer</p>
+                    </div>
+
+                    <!-- Right: Personal Letter styled for absolute readability -->
+                    <div class="md:col-span-8 font-serif text-neutral-200 text-sm sm:text-base leading-relaxed space-y-4">
+                        <p class="italic text-brand-gold text-base sm:text-lg">
+                            "Your small business is highly valuable, and you work incredibly hard to find clients. You should not be losing them to slow responses or voicemail boxes."
+                        </p>
+                        <p>
+                            I am a high-tech solo software developer building direct systems for businesses. <strong class="text-white font-bold">I do not run an agency.</strong> I don't use sales teams, and I will never hand you over to a junior developer.
+                        </p>
+                        <p>
+                            Because I work completely solo, <strong class="text-white font-bold">I guarantee 100% personalized help</strong>. If you ever want to change your reply logic or update your booking rules, you don't file support tickets. You text me directly, and I update it for you in minutes.
+                        </p>
+                        <p>
+                            Let's jump on a quick <strong class="text-white font-bold">5-minute strategy call</strong>. I will personally build a real, working reply prototype specifically for your website. If you love it, we can partner up. If not, you walk away without paying a single dollar.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="pt-6 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-center sm:text-left">
+                        <span class="block text-white font-serif italic text-base sm:text-lg font-bold">Mohamed Basith</span>
+                        <span class="block text-[8px] sm:text-[9px] text-neutral-500 uppercase tracking-widest font-extrabold">Your Solo Partner</span>
+                    </div>
+
+                    <a href="#contact" class="px-5 py-3 text-[10px] font-extrabold uppercase tracking-widest text-brand-charcoal bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark rounded hover:brightness-110 transition-all">
+                        Request Your 5-Min Strategy Call
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECURE STRATEGY CALL / APPLICATION FORM -->
+    <section id="contact" class="py-14 bg-[#09090B]">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+            <div class="max-w-xl mx-auto space-y-2 mb-8">
+                <span class="text-[9px] uppercase tracking-widest text-brand-gold font-extrabold block">Book Your Slot</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Let's Secure Your Website Leads</h2>
+                <p class="text-xs sm:text-sm text-neutral-400">
+                    Apply below to claim your 5-minute quick strategy call. I will personally build a working lead-response prototype specifically for your brand.
+                </p>
+            </div>
+
+            <!-- Toast alert box (revealed on form submit) -->
+            <div id="toastMessage" class="hidden max-w-md mx-auto mb-6 p-4 rounded-lg bg-neutral-900 border border-emerald-500/30 text-emerald-400 text-xs text-left flex items-start gap-3 shadow-lg">
+                <svg class="w-5 h-5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <span class="font-extrabold uppercase tracking-widest block text-[9px]">Strategy Call Requested</span>
+                    <p class="text-neutral-400 text-[10px] mt-0.5">Form received! See the phone simulator above to watch how your custom response handles emails instantly.</p>
+                </div>
+            </div>
+
+            <div class="bg-neutral-900/60 border border-brand-border rounded-xl p-5 sm:p-10 text-left shadow-2xl">
+                <form id="contactForm" class="space-y-4" onsubmit="submitForm(event)">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">Your Name</label>
+                            <input type="text" id="contactName" required placeholder="Alex Johnson" 
+                                   class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">Business Email</label>
+                            <input type="email" id="contactEmail" required placeholder="alex@mybusiness.com" 
+                                   class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">Your Website URL</label>
+                        <input type="text" id="contactUrl" required placeholder="www.yourcompany.com" 
+                               class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-[8px] sm:text-[9px] uppercase tracking-widest text-neutral-400 font-extrabold mb-1">How fast do you reply to leads right now?</label>
+                        <textarea id="contactBottleneck" rows="2" required placeholder="e.g. Usually takes a couple of hours, or most calls go to voicemail." 
+                                  class="w-full bg-[#09090B] border border-brand-border rounded px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-brand-gold transition-colors"></textarea>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full py-4 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-brand-charcoal bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark rounded hover:scale-[1.01] transition-all">
+                        Request 5-Min Call & Free Custom Prototype
+                    </button>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-16 bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12">
-            <div class="flex items-center gap-4">
-                <img 
-                    src="companylogo.png" 
-                    alt="TYPEX Logo" 
-                    class="h-10 w-auto"
-                    onerror="this.onerror=null; this.src='https://placehold.co/40x40/6366f1/ffffff?text=T'; this.classList.add('rounded-lg')"
-                >
-                <span class="heading-font text-2xl tracking-tighter text-slate-900">TYPEX</span>
+    <footer class="bg-neutral-950 border-t border-brand-border/60 py-10 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex flex-col items-center md:items-start">
+                <span class="block text-white font-extrabold text-xs uppercase tracking-wider">Mohamed Basith</span>
+                <span class="block text-[9px] text-neutral-500 tracking-wider">Direct, Honest Lead Booking Systems.</span>
             </div>
-            <div class="text-sm text-slate-400 font-semibold tracking-wide text-center">
-                © 2026 LOGICURACY LABS. ALL DATA REMAINS ON-PREMISE.
-            </div>
-            <div class="flex gap-10">
-                <a href="https://www.linkedin.com/in/mohammed-basith-78676b255/" target="_blank" class="text-slate-400 hover:text-indigo-600 transition font-bold text-[10px] uppercase tracking-[0.2em]">LinkedIn</a>
-                <a href="mailto:basith@logicuracy.com" class="text-slate-400 hover:text-indigo-600 transition font-bold text-[10px] uppercase tracking-[0.2em]">Support</a>
+
+            <div class="text-[9px] text-neutral-500 text-center md:text-right space-y-0.5">
+                <p>© 2026 Mohamed Basith. All rights reserved.</p>
+                <p>Helping small businesses secure client leads automatically.</p>
             </div>
         </div>
     </footer>
 
+    <!-- SYSTEM SCRIPTS -->
     <script>
-        const form = document.getElementById('typex-form');
-        const thankYou = document.getElementById('thank-you');
+        // Set dynamic simulated phone clock to current actual time
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const clockEl = document.getElementById('phoneClock');
+            if(clockEl) {
+                clockEl.innerText = hours + ':' + minutes + ' ' + ampm;
+            }
+        }
+        setInterval(updateClock, 10000);
+        updateClock();
 
-        form.onsubmit = function(e) {
-            e.preventDefault(); 
-            // Simulate form submission
-            const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.innerText = "Connecting...";
-            submitBtn.disabled = true;
+        // Lead Response Speed Simulator System
+        function runSimulator(event) {
+            if (event) event.preventDefault();
 
+            // Fetch inputs
+            const nameInput = document.getElementById('simName').value;
+            const emailInput = document.getElementById('simEmail').value;
+            const selectInquiry = document.getElementById('simInquiry');
+
+            // Fetch state elements
+            const idleState = document.getElementById('idlePhoneState');
+            const runningState = document.getElementById('runningPhoneState');
+            const successState = document.getElementById('successPhoneState');
+
+            // Switch to loading state
+            idleState.classList.add('hidden');
+            successState.classList.add('hidden');
+            runningState.classList.remove('hidden');
+
+            // Set variables inside simulated email
+            document.getElementById('recipientName').innerText = nameInput;
+            document.getElementById('recipientEmail').innerText = emailInput;
+
+            let topicFriendly = "urgent call scheduling";
+            if (selectInquiry.value === 'price') {
+                topicFriendly = "custom pricing packages";
+            } else if (selectInquiry.value === 'general') {
+                topicFriendly = "calendar availability queries";
+            }
+            document.getElementById('selectedTopicText').innerText = topicFriendly;
+
+            // Simulate quick response delay
             setTimeout(() => {
-                form.classList.add('hidden');
-                thankYou.classList.remove('hidden');
+                runningState.classList.add('hidden');
+                successState.classList.remove('hidden');
             }, 1200);
-        };
+        }
+
+        // Action click trigger inside the phone simulator
+        function triggerSimulatedSuccess() {
+            const contactSection = document.getElementById('contact');
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            const notify = document.getElementById('toastMessage');
+            notify.classList.remove('hidden');
+        }
+
+        // Submit form handler
+        function submitForm(event) {
+            event.preventDefault();
+            const contactName = document.getElementById('contactName').value;
+            const contactEmail = document.getElementById('contactEmail').value;
+            
+            // Sync inputs to simulated phone so user sees their actual details mapped
+            document.getElementById('simName').value = contactName;
+            document.getElementById('simEmail').value = contactEmail;
+            
+            // Scroll to the simulator section
+            const simulatorSection = document.getElementById('how-it-works');
+            simulatorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Display toast notice
+            const toast = document.getElementById('toastMessage');
+            toast.classList.remove('hidden');
+
+            // Instantly run simulator with the user's form details
+            runSimulator(null);
+        }
+
+        // Revenue Loss Calculator Math Logic
+        function calculateLoss() {
+            const leads = parseInt(document.getElementById('leadsRange').value);
+            const value = parseInt(document.getElementById('customerRange').value);
+
+            // Update range indicators
+            document.getElementById('leadsVal').innerText = leads + " leads";
+            document.getElementById('customerVal').innerText = "$" + value.toLocaleString();
+
+            // Assuming a standard 60% lead leak rate due to delayed response times and a modest 10% closing conversion
+            const lostRevenueValue = Math.round(leads * 0.60 * 0.10 * value);
+
+            document.getElementById('lostRevenueDisplay').innerText = "$" + lostRevenueValue.toLocaleString();
+        }
+
+        // Initialize Calculator
+        window.onload = function() {
+            calculateLoss();
+            
+            // Ensure proper fallback detection for profile pic
+            const img = document.getElementById('profileImage');
+            if (img && (!img.complete || img.naturalWidth === 0)) {
+                img.style.display = 'none';
+                document.getElementById('imageFallback').classList.remove('hidden');
+            }
+        }
     </script>
 </body>
 </html>
